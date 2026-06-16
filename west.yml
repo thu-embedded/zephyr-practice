@@ -1,0 +1,9 @@
+manifest:
+  self:
+    path: zephyr-practice
+
+  projects:
+    - name: zephyr
+      url: https://github.com/zephyrproject-rtos/zephyr
+      path: zephyr
+      west-commands: scripts/west-commands.yml

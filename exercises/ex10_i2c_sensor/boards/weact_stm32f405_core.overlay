@@ -1,0 +1,11 @@
+/*
+ * Device Tree overlay: thêm MPU6050 vào I2C1
+ * I2C1: SCL=PB6, SDA=PB7 (đã có trong board DTS)
+ */
+&i2c1 {
+	mpu6050: mpu6050@68 {
+		compatible = "invensense,mpu6050";
+		reg = <0x68>;
+		status = "okay";
+	};
+};

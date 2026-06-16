@@ -1,0 +1,59 @@
+name: Zephyr CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install west
+        run: pip install west
+
+      - name: Init west workspace
+        run: |
+          west init -l zephyr-practice
+          west update
+
+      - name: Install Zephyr SDK
+        run: |
+          wget -q https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.17.0/zephyr-sdk-0.17.0_linux-x86_64_minimal.tar.xz
+          tar xf zephyr-sdk-0.17.0_linux-x86_64_minimal.tar.xz
+          cd zephyr-sdk-0.17.0 && ./setup.sh -t arm-zephyr-eabi -h
+
+      - name: Install Python deps
+        run: |
+          pip install -r zephyr/scripts/requirements.txt
+
+      - name: Build ex00_hello (QEMU)
+        run: |
+          west build -b qemu_cortex_m3 \
+            zephyr-practice/exercises/ex00_hello \
+            --build-dir /tmp/build_ex00
+
+      - name: Run tests with twister
+        run: |
+          ./zephyr/scripts/twister \
+            -T zephyr-practice/exercises/ex21_ci \
+            -p qemu_cortex_m3 \
+            --inline-logs \
+            -v
+
+      - name: Upload twister results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: twister-results
+          path: twister-out/

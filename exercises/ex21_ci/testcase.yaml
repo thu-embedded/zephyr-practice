@@ -1,0 +1,11 @@
+tests:
+  exercises.ex21_ci:
+    tags: ci ztest
+    platform_allow:
+      - qemu_cortex_m3
+      - native_sim
+    harness: ztest
+    harness_config:
+      type: one_line
+      regex:
+        - "TESTSUITE ci_demo succeeded"
