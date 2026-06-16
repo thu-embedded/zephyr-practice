@@ -1,0 +1,11 @@
+build/
+*.o
+*.a
+*.elf
+*.bin
+*.hex
+*.map
+*.lst
+*.pyc
+__pycache__/
+.vscode/

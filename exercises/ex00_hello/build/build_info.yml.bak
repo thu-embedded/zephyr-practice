@@ -1,4 +1,0 @@
-west:
-  command: /home/thule/zephyrproject/.venv/bin/west build -p -b qemu_cortex_m3 .
-  topdir: /home/thule/rtos-zephyr-workspaces
-  version: 1.5.0
